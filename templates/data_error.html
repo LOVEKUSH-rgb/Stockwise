@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Data file problem{% endblock %}
+{% block content %}
+  <div class="empty-state panel error-state"><span class="empty-icon">!</span><h1>We couldn't load your data</h1><p>{{ message }}</p><p>Your existing data was not replaced. Fix the indicated JSON file, then reload this page.</p></div>
+{% endblock %}

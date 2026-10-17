@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Receipt{% endblock %}
+{% block content %}
+  <div class="receipt-wrap">
+    <div class="success-banner"><span class="success-mark">✓</span><div><strong>Sale completed successfully</strong><span>Your inventory has been updated and the order is recorded.</span></div></div>
+    <article class="receipt-card panel">
+      <div class="receipt-brand"><span class="brand-mark">S</span><span>Stockwise<small>SALES RECEIPT</small></span><span class="receipt-paid">PAID</span></div>
+      <div class="receipt-meta"><div><span>ORDER ID</span><strong>{{ sale.order_id }}</strong></div><div><span>DATE &amp; TIME</span><strong>{{ sale.date|replace('T', ' ') }}</strong></div></div>
+      <div class="receipt-item"><div><strong>{{ sale.product_name }}</strong><span>${{ "%.2f"|format(sale.unit_price) }} each</span></div><span>× {{ sale.quantity }}</span></div>
+      <div class="receipt-total"><span>Total paid</span><strong>${{ "%.2f"|format(sale.total) }}</strong></div>
+      <p class="receipt-thanks">Thank you. Keep this receipt for your records.</p>
+    </article>
+    <div class="receipt-actions"><a class="button button-secondary" href="{{ url_for('sales_page') }}">View sales history</a><a class="button button-primary" href="{{ url_for('checkout') }}">＋ New sale</a></div>
+  </div>
+{% endblock %}

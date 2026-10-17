@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit product' if product else 'Add product' }}{% endblock %}
+{% block content %}
+  <div class="page-heading">
+    <div><span class="eyebrow">INVENTORY CATALOG</span><h1>{{ 'Edit product' if product else 'Add a product' }}</h1><p>{{ 'Update the product details below.' if product else 'Add an item to start tracking it in your inventory.' }}</p></div>
+    <a class="button button-secondary" href="{{ url_for('products_page') }}">← Back to products</a>
+  </div>
+  <div class="form-layout">
+    <form class="panel form-card" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="form-section-title"><span class="form-icon">▤</span><div><h2>Product details</h2><p>Fields marked with * are required.</p></div></div>
+      <div class="form-grid">
+        <label class="field field-full"><span>Product name <b>*</b></span><input name="name" value="{{ form.get('name', '') }}" maxlength="120" required placeholder="e.g. Wireless Mouse"><small>Use a clear name your team will recognize.</small></label>
+        <label class="field"><span>Category <b>*</b></span><input name="category" value="{{ form.get('category', '') }}" maxlength="60" required placeholder="e.g. Electronics"></label>
+        <label class="field"><span>Unit price <b>*</b></span><div class="input-prefix"><span>$</span><input name="price" type="number" value="{{ form.get('price', '') }}" min="0" step="0.01" required placeholder="0.00"></div></label>
+        {% if product %}
+          <div class="field"><span>Quantity in stock</span><div class="readonly-value">{{ product.quantity }} units <span>Change quantity using Restock or Checkout.</span></div></div>
+        {% else %}
+          <label class="field"><span>Starting quantity <b>*</b></span><input name="quantity" type="number" value="{{ form.get('quantity', '0') }}" min="0" step="1" required></label>
+        {% endif %}
+        <label class="field"><span>Low-stock threshold <b>*</b></span><input name="low_stock_threshold" type="number" value="{{ form.get('low_stock_threshold', '5') }}" min="0" step="1" required><small>You'll be alerted when stock reaches this number.</small></label>
+      </div>
+      <div class="form-actions"><a class="text-link" href="{{ url_for('products_page') }}">Cancel</a><button class="button button-primary" type="submit">{{ 'Save changes' if product else 'Add product' }}</button></div>
+    </form>
+    <aside class="tip-card"><span class="tip-icon">✦</span><h3>Keep stock accurate</h3><p>Stock quantities are updated through restocking and completed sales, not by editing product details.</p></aside>
+  </div>
+{% endblock %}

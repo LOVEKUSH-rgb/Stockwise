@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102a43">
+  <title>{% block title %}Inventory{% endblock %} | Stockwise</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="{{ url_for('dashboard') }}">
+        <span class="brand-mark">S</span>
+        <span>Stockwise<small>INVENTORY STUDIO</small></span>
+      </a>
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a class="{{ 'active' if request.endpoint == 'dashboard' else '' }}" href="{{ url_for('dashboard') }}"><span class="nav-icon">▦</span>Overview</a>
+        <a class="{{ 'active' if request.endpoint in ['products_page', 'add_product', 'edit_product'] else '' }}" href="{{ url_for('products_page') }}"><span class="nav-icon">▤</span>Products</a>
+        <a class="{{ 'active' if request.endpoint == 'checkout' else '' }}" href="{{ url_for('checkout') }}"><span class="nav-icon">＋</span>New sale</a>
+        <a class="{{ 'active' if request.endpoint in ['sales_page', 'receipt'] else '' }}" href="{{ url_for('sales_page') }}"><span class="nav-icon">↗</span>Sales reports</a>
+      </nav>
+      <div class="sidebar-note">
+        <span class="status-dot"></span>
+        <div><strong>Inventory is live</strong><small>Changes save automatically</small></div>
+      </div>
+    </aside>
+    <main class="main-area">
+      <header class="topbar">
+        <div class="mobile-brand"><span class="brand-mark">S</span> Stockwise</div>
+        <span class="topbar-note">Smart Inventory &amp; Order Management</span>
+        <a class="button button-primary button-small" href="{{ url_for('checkout') }}">＋ <span>New sale</span></a>
+      </header>
+      <section class="page-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="notifications" aria-live="polite">
+              {% for category, message in messages %}
+                <div class="notice notice-{{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+      </section>
+      <footer class="page-footer">Stockwise <span>·</span> Simple, thoughtful stock control</footer>
+    </main>
+  </div>
+</body>
+</html>

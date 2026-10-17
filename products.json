@@ -1,0 +1,10 @@
+[
+  {
+    "product_id": "PRD-BEA4BFE2",
+    "name": "sugar",
+    "category": "food",
+    "price": 1.0,
+    "quantity": 0,
+    "low_stock_threshold": 5
+  }
+]

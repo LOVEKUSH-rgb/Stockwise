@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}New sale{% endblock %}
+{% block content %}
+  <div class="page-heading">
+    <div><span class="eyebrow">ORDER MANAGEMENT</span><h1>New sale</h1><p>Complete a sale and update inventory in one step.</p></div>
+    <a class="button button-secondary" href="{{ url_for('sales_page') }}">View sales history</a>
+  </div>
+  {% if products %}
+    <div class="checkout-layout">
+      <form class="panel form-card checkout-card" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-section-title"><span class="form-icon">↗</span><div><h2>Sale details</h2><p>Select an item and enter the quantity.</p></div></div>
+        <label class="field"><span>Product <b>*</b></span><select name="product_id" required>
+          {% for product in products %}
+            <option value="{{ product.product_id }}" {{ 'disabled' if product.quantity == 0 else '' }}>{{ product.name }} · ${{ "%.2f"|format(product.price) }} · {{ product.quantity }} available{% if product_is_low(product) %} · LOW STOCK{% endif %}</option>
+          {% endfor %}
+        </select></label>
+        <label class="field"><span>Quantity <b>*</b></span><input name="quantity" type="number" min="1" step="1" required placeholder="1"><small>Available inventory is verified when the sale is submitted.</small></label>
+        <div class="notice notice-info">The unit price and total are calculated securely from the saved product record.</div>
+        <div class="form-actions"><a class="text-link" href="{{ url_for('dashboard') }}">Cancel</a><button class="button button-primary" type="submit">Complete sale →</button></div>
+      </form>
+      <aside class="tip-card"><span class="tip-icon">✓</span><h3>Stock stays in sync</h3><p>Inventory only decreases after a valid sale is recorded. Orders that exceed available stock are rejected.</p><a class="text-link" href="{{ url_for('products_page') }}">Review inventory →</a></aside>
+    </div>
+  {% else %}
+    <div class="empty-state panel"><span class="empty-icon">↗</span><h3>Add products before checkout</h3><p>Your catalog is empty, so there are no items available to sell.</p><a class="button button-primary" href="{{ url_for('add_product') }}">Add a product</a></div>
+  {% endif %}
+{% endblock %}

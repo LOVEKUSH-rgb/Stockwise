@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Sales reports{% endblock %}
+{% block content %}
+  <div class="page-heading">
+    <div><span class="eyebrow">ORDER MANAGEMENT</span><h1>Sales reports</h1><p>Review completed orders and revenue from your sales.</p></div>
+    <a class="button button-primary" href="{{ url_for('export_sales') }}">⇩ Export CSV</a>
+  </div>
+  <div class="report-summary panel"><div class="report-icon">↗</div><div><span class="stat-label">Total sales revenue</span><strong>${{ "%.2f"|format(total_revenue) }}</strong><small>{{ sales|length }} completed {{ 'order' if sales|length == 1 else 'orders' }}</small></div></div>
+  <div class="section-heading section-heading-spaced"><div><h2>Sales history</h2><p>Most recent orders appear first</p></div></div>
+  {% if sales %}
+    <div class="panel table-panel"><div class="table-wrap"><table>
+      <thead><tr><th>Order</th><th>Product</th><th>Quantity</th><th>Total</th><th>Date &amp; time</th><th></th></tr></thead>
+      <tbody>{% for sale in sales %}
+        <tr><td><span class="product-name">{{ sale.order_id }}</span></td><td>{{ sale.product_name }}<span class="sub-cell">${{ "%.2f"|format(sale.unit_price) }} per unit</span></td><td>{{ sale.quantity }}</td><td><strong>${{ "%.2f"|format(sale.total) }}</strong></td><td>{{ sale.date|replace('T', ' ') }}</td><td><a class="text-link" href="{{ url_for('receipt', order_id=sale.order_id) }}">Receipt →</a></td></tr>
+      {% endfor %}</tbody>
+    </table></div></div>
+  {% else %}
+    <div class="empty-state panel"><span class="empty-icon">↗</span><h3>No sales yet</h3><p>Completed orders will appear here, ready to review or export.</p><a class="button button-primary" href="{{ url_for('checkout') }}">Start a sale</a></div>
+  {% endif %}
+{% endblock %}
